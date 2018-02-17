@@ -166,15 +166,21 @@ function _M.subscribe( self, channel )
         return nil, err
     end
 
-    res, err = redis:read_reply()
-    if not res then
-        return nil, err
+    local function do_read_func(do_read)
+        if do_read == nil or do_read == true then 
+            res, err = redis:read_reply()
+            if not res then 
+                return nil, err 
+            end
+            return res 
+        end
+
+        redis:unsubscribe(channel)
+        self.set_keepalive_mod(redis)
+        return 
     end
 
-    redis:unsubscribe(channel)
-    self.set_keepalive_mod(redis)
-
-    return res, err
+    return do_read_func
 end
 
 local function do_command(self, cmd, ... )
