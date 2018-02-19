@@ -31,7 +31,7 @@ if not res then
 end
 
 local cjson = require "cjson"
-ngx.say("result: ", cjson.encode(res)) 
+ngx.say("result: ", cjson.encode(res)) -- 将结果解析为json数据返回
 
 -- put it into the connection pool of size 100,
             -- with 10 seconds max idle timeout
